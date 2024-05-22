@@ -5,7 +5,7 @@ if (!process.contextIsolated) {
 
 try {
   contextBridge.exposeInMainWorld('context', {
-    // TODO:
+    // TODO: expose the electron functionality to react app
   })
 } catch (error) {
   console.log(error)
