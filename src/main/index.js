@@ -1,22 +1,21 @@
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { BrowserWindow, app, ipcMain, shell } from 'electron'
 import { join } from 'path'
-import icon from '../../resources/icon.png?asset'
+const os = require('node:os')
 
+let mainWindow
 function createWindow() {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
     autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
     center: true,
     title: 'Micro POS',
-    // frame: false,
-    vibrancy: 'under-window',
+
     visualEffectState: 'active',
-    // titleBarStyle: 'hidden',
+
     trafficLightPosition: { x: 15, y: 10 },
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -29,6 +28,7 @@ function createWindow() {
     mainWindow.show()
   })
 
+  mainWindow.webContents.openDevTools()
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
@@ -57,8 +57,10 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
+  // test react to electron data pass
+  ipcMain.handle('passData', (_, ...args) => {
+    console.log('react to electorn')
+  })
 
   createWindow()
 

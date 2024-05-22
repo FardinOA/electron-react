@@ -5,23 +5,22 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { useState } from 'react'
 import LoadingOverlay from '../ui/loadingOverlay'
+import { useLoginMutation } from '../../store/features/user/userApi'
 
 export function LoginForm() {
-  const [isLoading, setIsLoading] = useState(false)
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors }
   } = useForm()
+  const [login, { isLoading }] = useLoginMutation()
 
   const onSubmit = (data) => {
-    setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
     console.log(data)
+    login(data)
   }
+
   return (
     <div className="flex justify-center items-center h-dvh">
       <Card className="mx-auto max-w-sm relative overflow-hidden ">
